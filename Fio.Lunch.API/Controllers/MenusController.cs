@@ -28,14 +28,14 @@ namespace Fio.Lunch.API.Controllers
         }
 
         [HttpGet]
-        [Route("api/v1/menus/current")]
+        [Route("current")]
         public Menu GetCurrentMenu()
         {
             return _context.Menu.Where(m => m.Days.Min(d => d.Date.DayOfYear) <= DateTime.Now.DayOfYear && m.Days.Max(d => d.Date.DayOfYear) >= DateTime.Now.DayOfYear).First();
         }
 
         [HttpGet]
-        [Route("api/v1/menus/active")]
+        [Route("active")]
         public IEnumerable<Menu> GetActiveMenus()
         {
             return _context.Menu.Where(m => m.IsActive);
@@ -104,6 +104,8 @@ namespace Fio.Lunch.API.Controllers
                 return BadRequest(ModelState);
             }
 
+            ////var days = _context.Day.Where()
+            ////menu.Days
             _context.Menu.Add(menu);
             await _context.SaveChangesAsync();
 
