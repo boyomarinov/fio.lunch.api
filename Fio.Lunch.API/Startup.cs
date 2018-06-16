@@ -36,6 +36,7 @@ namespace Fio.Lunch.API
             {
                 c.SwaggerDoc("v1", new Info { Title = "Fio.Lunch.API", Version = "v1" });
             });
+            services.AddCors();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,7 +58,15 @@ namespace Fio.Lunch.API
                 c.RoutePrefix = string.Empty;
             });
 
+            app.UseCors(builder =>
+                builder
+                    .AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .AllowCredentials());
+
             app.UseMvc();
+            
         }
     }
 }
