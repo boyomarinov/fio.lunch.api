@@ -90,6 +90,8 @@ namespace Fio.Lunch.API.Controllers
                 return BadRequest(ModelState);
             }
 
+            RefreshMeals(day);
+
             _context.Day.Add(day);
             try
             {
@@ -134,6 +136,21 @@ namespace Fio.Lunch.API.Controllers
         private bool DayExists(DateTime id)
         {
             return _context.Day.Any(e => e.Date == id);
+        }
+
+        private void RefreshMeals(Day day)
+        {
+            var meals = new List<Meal>();
+            foreach (var meal in day.Meals)
+            {
+                var mmm = _context.Meal.Where(m => m.Id == meal.Id).FirstOrDefault();
+                if (mmm == null)
+                    mmm = meal;
+
+                meals.Add(mmm);
+            }
+
+            day.Meals = meals;
         }
     }
 }
