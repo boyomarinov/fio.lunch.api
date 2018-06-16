@@ -10,7 +10,7 @@ using Fio.Lunch.API.Models;
 namespace Fio.Lunch.API.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Ratings")]
+    [Route("api/v1/Ratings")]
     public class RatingsController : Controller
     {
         private readonly FioLunchAPIContext _context;

@@ -11,7 +11,7 @@ using System.IO;
 namespace Fio.Lunch.API.Controllers
 {
     [Produces("application/json")]
-    [Route("api/Resources")]
+    [Route("api/v1/Resources")]
     public class ResourcesController : Controller
     {
         private readonly FioLunchAPIContext _context;
