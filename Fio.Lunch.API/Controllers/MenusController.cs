@@ -27,6 +27,20 @@ namespace Fio.Lunch.API.Controllers
             return _context.Menu;
         }
 
+        [HttpGet]
+        [Route("api/v1/menus/current")]
+        public Menu GetCurrentMenu()
+        {
+            return _context.Menu.Where(m => m.Days.Min(d => d.Date.DayOfYear) <= DateTime.Now.DayOfYear && m.Days.Max(d => d.Date.DayOfYear) >= DateTime.Now.DayOfYear).First();
+        }
+
+        [HttpGet]
+        [Route("api/v1/menus/active")]
+        public IEnumerable<Menu> GetActiveMenus()
+        {
+            return _context.Menu.Where(m => m.IsActive);
+        }
+
         // GET: api/Menus/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetMenu([FromRoute] int id)

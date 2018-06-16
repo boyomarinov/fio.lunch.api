@@ -11,9 +11,10 @@ using System;
 namespace Fio.Lunch.API.Migrations
 {
     [DbContext(typeof(FioLunchAPIContext))]
-    partial class FioLunchAPIContextModelSnapshot : ModelSnapshot
+    [Migration("20180616151104_Add active menu property")]
+    partial class Addactivemenuproperty
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

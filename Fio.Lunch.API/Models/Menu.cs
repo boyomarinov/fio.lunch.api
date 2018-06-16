@@ -11,5 +11,7 @@ namespace Fio.Lunch.API.Models
 
         public IEnumerable<Day> Days { get; set; }
 
+        public bool IsActive { get; set; }
+
     }
 }
