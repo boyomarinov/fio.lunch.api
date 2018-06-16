@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Fio.Lunch.API.Models;
+using System.IO;
 
 namespace Fio.Lunch.API.Controllers
 {
@@ -94,6 +95,31 @@ namespace Fio.Lunch.API.Controllers
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetResource", new { id = resource.Id }, resource);
+        }
+
+        // POST: api/Resources
+        [HttpPost]
+        [Route("api/v1/menus")]
+        public async Task<IActionResult> UploadMenu(List<IFormFile> files)
+        {
+            throw new NotImplementedException("TODO: Implement file upload and read from spread sheet");
+            long size = files.Sum(f => f.Length);
+
+            // full path to file in temp location
+            var filePath = Path.GetTempFileName();
+
+            foreach (var formFile in files)
+            {
+                if (formFile.Length > 0)
+                {
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await formFile.CopyToAsync(stream);
+                    }
+                }
+            }
+
+            return Ok();
         }
 
         // DELETE: api/Resources/5
