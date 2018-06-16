@@ -29,7 +29,8 @@ namespace Fio.Lunch.API
             services.AddMvc();
 
             services.AddDbContext<FioLunchAPIContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("FioLunchAPIContext")));
+                    options.UseSqlite(Configuration.GetConnectionString("FioLunchAPIContext")));
+                    ////options.UseSqlServer(Configuration.GetConnectionString("FioLunchAPIContext")));
 
             services.AddSwaggerGen(c =>
             {

@@ -16,7 +16,8 @@ namespace Fio.Lunch.API.Models
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Data Source=JAC2\\SQLEXPRESS;Initial Catalog=Fio.Lunch;Integrated Security=True");
+            optionsBuilder.UseSqlite("Data Source=fio.lunch.db");
+            ////optionsBuilder.UseSqlServer("Data Source=JAC2\\SQLEXPRESS;Initial Catalog=Fio.Lunch;Integrated Security=True");
         }
 
         public DbSet<Fio.Lunch.API.Models.Menu> Menu { get; set; }
