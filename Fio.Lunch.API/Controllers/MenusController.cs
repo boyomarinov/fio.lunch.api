@@ -104,12 +104,46 @@ namespace Fio.Lunch.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            ////var days = _context.Day.Where()
-            ////menu.Days
+            RefreshMenuDays(menu);
+            RefreshMeals(menu);
+
             _context.Menu.Add(menu);
             await _context.SaveChangesAsync();
 
             return CreatedAtAction("GetMenu", new { id = menu.Id }, menu);
+        }
+
+        private void RefreshMeals(Menu menu)
+        {
+            foreach (var day in menu.Days)
+            {
+                var meals = new List<Meal>();
+                foreach (var meal in day.Meals)
+                {
+                    var mmm = _context.Meal.Where(m => m.Id == meal.Id).FirstOrDefault();
+                    if (mmm == null)
+                        mmm = meal;
+
+                    meals.Add(mmm);
+                }
+
+                day.Meals = meals;
+            }
+        }
+
+        private void RefreshMenuDays(Menu menu)
+        {
+            var menuDays = new List<Day>();
+            foreach (var day in menu.Days)
+            {
+                var ddd = _context.Day.Where(d => d.Date == day.Date).FirstOrDefault();
+                if (ddd == null)
+                    ddd = day;
+
+                menuDays.Add(ddd);
+
+            }
+            menu.Days = menuDays;
         }
 
         // DELETE: api/Menus/5
