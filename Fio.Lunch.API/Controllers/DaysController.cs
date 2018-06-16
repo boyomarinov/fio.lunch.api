@@ -27,6 +27,14 @@ namespace Fio.Lunch.API.Controllers
             return _context.Day;
         }
 
+        [HttpGet]
+        [Route("/api/v1/menus/{id}/days")]
+        public IEnumerable<Day> GetMenuDays(int id)
+        {
+            var menu = _context.Menu.Include(m=>m.Days).Where(m => m.Id == id).First();
+            return menu.Days ?? new List<Day>();
+        }
+
         // GET: api/Days/5
         [HttpGet("{id}")]
         public async Task<IActionResult> GetDay([FromRoute] DateTime id)
@@ -79,6 +87,44 @@ namespace Fio.Lunch.API.Controllers
             }
 
             return NoContent();
+        }
+
+        [HttpPost]
+        [Route("/api/v1/menus/{id}/days")]
+        public async Task<IActionResult> AddDayToMenu(int id, [FromBody] Day day)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            //RefreshMeals(day);
+            ////var dayEntity = _context.Day.Add(day);
+            var menu = _context.Menu.Include(m => m.Days).Where(m => m.Id == id).First();
+            if (menu.Days == null)
+            {
+                menu.Days = new List<Day>();
+            }
+
+            menu.Days.Add(day);
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateException)
+            {
+                if (DayExists(day.Date))
+                {
+                    return new StatusCodeResult(StatusCodes.Status409Conflict);
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return CreatedAtAction("GetDay", new { id = day.Date }, day);
         }
 
         // POST: api/Days

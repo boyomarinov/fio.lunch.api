@@ -46,6 +46,26 @@ namespace Fio.Lunch.API.Controllers
             return Ok(meal);
         }
 
+        [HttpGet]
+        [Route("/api/v1/days/{id}/meals")]
+        public async Task<IActionResult> GetMealsByDay([FromRoute] DateTime id)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var meals = _context.Day.Include(d => d.Meals).SingleOrDefault(d => d.Date == id).Meals;
+
+            if (meals == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(meals);
+        }
+
+
         // PUT: api/Meals/5
         [HttpPut("{id}")]
         public async Task<IActionResult> PutMeal([FromRoute] int id, [FromBody] Meal meal)
@@ -83,6 +103,21 @@ namespace Fio.Lunch.API.Controllers
 
         // POST: api/Meals
         [HttpPost]
+        [Route("/api/v1/days/{id}/meals")]
+        public async Task<IActionResult> PostMeal(DateTime id, [FromBody] Meal meal)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            _context.Day.Include(d => d.Meals).SingleOrDefault(d => d.Date == id).Meals.Add(meal);
+            await _context.SaveChangesAsync();
+
+            return CreatedAtAction("GetMeal", new { id = meal.Id }, meal);
+        }
+
+        [HttpPost]
         public async Task<IActionResult> PostMeal([FromBody] Meal meal)
         {
             if (!ModelState.IsValid)
@@ -95,6 +130,7 @@ namespace Fio.Lunch.API.Controllers
 
             return CreatedAtAction("GetMeal", new { id = meal.Id }, meal);
         }
+
 
         // DELETE: api/Meals/5
         [HttpDelete("{id}")]

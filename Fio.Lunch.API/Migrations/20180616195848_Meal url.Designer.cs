@@ -11,9 +11,10 @@ using System;
 namespace Fio.Lunch.API.Migrations
 {
     [DbContext(typeof(FioLunchAPIContext))]
-    partial class FioLunchAPIContextModelSnapshot : ModelSnapshot
+    [Migration("20180616195848_Meal url")]
+    partial class Mealurl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

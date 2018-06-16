@@ -11,9 +11,10 @@ using System;
 namespace Fio.Lunch.API.Migrations
 {
     [DbContext(typeof(FioLunchAPIContext))]
-    partial class FioLunchAPIContextModelSnapshot : ModelSnapshot
+    [Migration("20180616192059_Lists intead of enums")]
+    partial class Listsinteadofenums
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,8 +41,6 @@ namespace Fio.Lunch.API.Migrations
                     b.Property<DateTime?>("DayDate");
 
                     b.Property<string>("Description");
-
-                    b.Property<string>("ImageUrl");
 
                     b.Property<string>("Name");
 

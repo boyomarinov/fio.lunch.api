@@ -8,7 +8,7 @@ namespace Fio.Lunch.API.Models
 {
     public class Day
     {
-        public IEnumerable<Meal> Meals { get; set; }
+        public List<Meal> Meals { get; set; }
 
         [Key]
         public DateTime Date { get; set; }
