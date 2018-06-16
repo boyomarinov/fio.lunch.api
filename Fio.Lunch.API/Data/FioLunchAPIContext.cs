@@ -14,6 +14,11 @@ namespace Fio.Lunch.API.Models
         {
         }
 
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.UseSqlite("Data Source=fio.lunch.db");
+        }
+
         public DbSet<Fio.Lunch.API.Models.Menu> Menu { get; set; }
 
         public DbSet<Fio.Lunch.API.Models.Meal> Meal { get; set; }

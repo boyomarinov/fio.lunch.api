@@ -10,6 +10,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using Fio.Lunch.API.Models;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace Fio.Lunch.API
 {
@@ -28,7 +29,12 @@ namespace Fio.Lunch.API
             services.AddMvc();
 
             services.AddDbContext<FioLunchAPIContext>(options =>
-                    options.UseSqlServer(Configuration.GetConnectionString("FioLunchAPIContext")));
+                    options.UseSqlite(Configuration.GetConnectionString("FioLunchAPIContext")));
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info { Title = "Fio.Lunch.API", Version = "v1" });
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,6 +44,17 @@ namespace Fio.Lunch.API
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint.
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui (HTML, JS, CSS, etc.), 
+            // specifying the Swagger JSON endpoint.
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Fio.Lunch.API");
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseMvc();
         }
