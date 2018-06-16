@@ -24,21 +24,21 @@ namespace Fio.Lunch.API.Controllers
         [HttpGet]
         public IEnumerable<Menu> GetMenu()
         {
-            return _context.Menu;
+            return _context.Menu.Include(m => m.Days);
         }
 
         [HttpGet]
         [Route("current")]
         public Menu GetCurrentMenu()
         {
-            return _context.Menu.Where(m => m.Days.Min(d => d.Date.DayOfYear) <= DateTime.Now.DayOfYear && m.Days.Max(d => d.Date.DayOfYear) >= DateTime.Now.DayOfYear).First();
+            return _context.Menu.Include(m=>m.Days).Where(m => m.Days.Min(d => d.Date.DayOfYear) <= DateTime.Now.DayOfYear && m.Days.Max(d => d.Date.DayOfYear) >= DateTime.Now.DayOfYear).First();
         }
 
         [HttpGet]
         [Route("active")]
         public IEnumerable<Menu> GetActiveMenus()
         {
-            return _context.Menu.Where(m => m.IsActive);
+            return _context.Menu.Include(m => m.Days).Where(m => m.IsActive);
         }
 
         // GET: api/Menus/5
@@ -50,7 +50,7 @@ namespace Fio.Lunch.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var menu = await _context.Menu.SingleOrDefaultAsync(m => m.Id == id);
+            var menu = await _context.Menu.Include(m => m.Days).SingleOrDefaultAsync(m => m.Id == id);
 
             if (menu == null)
             {
