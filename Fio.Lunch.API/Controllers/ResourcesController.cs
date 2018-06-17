@@ -113,20 +113,30 @@ namespace Fio.Lunch.API.Controllers
             EntityEntry<Resource> res = null;
             ////foreach (var formFile in files)
             ////{
-            ////    var resource = new Resource();
-            ////    if (formFile.Length > 0)
-            ////    {
-            ////        using (var stream = new MemoryStream(resource.Data))
-            ////        {
+            var resource = new Resource();
+            if (file.Length > 0)
+            {
+                resource.Data = new byte[file.Length];
+                using (var stream = new MemoryStream(resource.Data))
+                {
 
-            ////            await formFile.CopyToAsync(stream);
-            ////        }
-            ////    }
-            ////    res = _context.Resource.Add(resource);
-            ////}
+                    file.CopyToAsync(stream);
+                }
+            }
+            res = _context.Resource.Add(resource);
 
-            ////_context.SaveChanges();
+
+            _context.SaveChanges();
             return Ok(res.Entity);
+        }
+
+        [HttpGet]
+        [Route("/api/v1/resources/{id}/image")]
+        public async Task<IActionResult> GetImage(int id)
+        {
+            var img = _context.Resource.Where(r => r.Id == id).SingleOrDefault();
+            var image = new MemoryStream(img.Data);
+            return File(image, "image/jpeg");
         }
 
         // DELETE: api/Resources/5
