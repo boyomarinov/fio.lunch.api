@@ -127,7 +127,7 @@ namespace Fio.Lunch.API.Controllers
 
 
             _context.SaveChanges();
-            return Ok(res.Entity);
+            return Ok($"/api/v1/resourses/{res.Entity.Id}");
         }
 
         [HttpGet]
