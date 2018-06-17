@@ -120,7 +120,7 @@ namespace Fio.Lunch.API.Controllers
                 using (var stream = new MemoryStream(resource.Data))
                 {
 
-                    file.CopyToAsync(stream);
+                    file.CopyTo(stream);
                 }
             }
             res = _context.Resource.Add(resource);
