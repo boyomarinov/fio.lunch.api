@@ -135,7 +135,7 @@ namespace Fio.Lunch.API.Controllers
             var menuDays = new List<Day>();
             foreach (var day in menu.Days)
             {
-                var ddd = _context.Day.Where(d => d.Date == day.Date).FirstOrDefault();
+                var ddd = _context.Day.Include(d=>d.Meals).Where(d => d.Date == day.Date).FirstOrDefault();
                 if (ddd == null)
                     ddd = day;
 
