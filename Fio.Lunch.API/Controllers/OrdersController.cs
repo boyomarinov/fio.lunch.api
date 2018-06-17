@@ -24,7 +24,7 @@ namespace Fio.Lunch.API.Controllers
         [HttpGet]
         public IEnumerable<Order> GetOrder()
         {
-            return _context.Order;
+            return _context.Order.Include(o=>o.Day).Include(o=>o.Meal).Include(o=>o.Menu).Include(o=>o.User);
         }
 
         // GET: api/Orders/5
@@ -90,6 +90,14 @@ namespace Fio.Lunch.API.Controllers
                 return BadRequest(ModelState);
             }
 
+            var day = _context.Day.Where(d => d.Date == order.Day.Date).SingleOrDefault();
+            var meal = _context.Meal.Where(m => m.Id == order.Meal.Id).SingleOrDefault();
+            var user = _context.User.Where(u => u.Id == order.User.Id).SingleOrDefault();
+            var menu = _context.Menu.Where(m => m.Id == order.Menu.Id).SingleOrDefault();
+            order.Meal = meal;
+            order.Menu = menu;
+            order.Day = day;
+            order.User = user;
             _context.Order.Add(order);
             await _context.SaveChangesAsync();
 
