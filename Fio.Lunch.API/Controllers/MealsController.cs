@@ -22,7 +22,7 @@ namespace Fio.Lunch.API.Controllers
 
 
         [HttpGet]
-        public IEnumerable<Meal> GetMeals(string keyword = "", string description = "")
+        public IEnumerable<Meal> GetMeals(string keyword = "", string description = "", int? rating = null)
         {
             IQueryable<Meal> menuContext = _context.Meal;
             if (!string.IsNullOrEmpty(keyword))
@@ -33,6 +33,11 @@ namespace Fio.Lunch.API.Controllers
             if (!string.IsNullOrEmpty(description))
             {
                 menuContext = menuContext.Where(m => m.Description.IndexOf(description, StringComparison.InvariantCultureIgnoreCase) > -1);
+            }
+
+            if(rating.HasValue)
+            {
+                menuContext = menuContext.Where(m => m.Rating == rating.Value);
             }
 
             return menuContext;
