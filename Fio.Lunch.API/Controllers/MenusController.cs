@@ -23,7 +23,7 @@ namespace Fio.Lunch.API.Controllers
         [HttpGet]
         public IEnumerable<Menu> GetMenus()
         {
-            return _context.Menu.Include(m => m.Days.Select(d => d.Meals));
+            return _context.Menu.Include(m => m.Days);
         }
 
         [HttpGet]
