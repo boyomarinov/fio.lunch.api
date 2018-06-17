@@ -30,14 +30,14 @@ namespace Fio.Lunch.API.Controllers
         [Route("current")]
         public Menu GetCurrentMenu()
         {
-            return _context.Menu.Include(m => m.Days.Select(d => d.Meals)).Where(m => m.Days.Min(d => d.Date.DayOfYear) <= DateTime.Now.DayOfYear && m.Days.Max(d => d.Date.DayOfYear) >= DateTime.Now.DayOfYear).First();
+            return _context.Menu.Include(m => m.Days).Where(m => m.Days.Min(d => d.Date.DayOfYear) <= DateTime.Now.DayOfYear && m.Days.Max(d => d.Date.DayOfYear) >= DateTime.Now.DayOfYear).First();
         }
 
         [HttpGet]
         [Route("active")]
         public IEnumerable<Menu> GetActiveMenus()
         {
-            return _context.Menu.Include(m => m.Days.Select(d => d.Meals)).Where(m => m.IsActive);
+            return _context.Menu.Include(m => m.Days).Where(m => m.IsActive);
         }
 
         // GET: api/Menus/5
