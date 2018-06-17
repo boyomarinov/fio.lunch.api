@@ -24,7 +24,7 @@ namespace Fio.Lunch.API.Controllers
         [HttpGet]
         public IEnumerable<Day> GetDay()
         {
-            return _context.Day;
+            return _context.Day.Include(d => d.Meals);
         }
 
         [HttpGet]
@@ -44,7 +44,7 @@ namespace Fio.Lunch.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            var day = await _context.Day.SingleOrDefaultAsync(m => m.Date == id);
+            var day = await _context.Day.Include(d=>d.Meals).SingleOrDefaultAsync(m => m.Date == id);
 
             if (day == null)
             {
@@ -98,7 +98,7 @@ namespace Fio.Lunch.API.Controllers
                 return BadRequest(ModelState);
             }
 
-            //RefreshMeals(day);
+            RefreshMeals(day);
             ////var dayEntity = _context.Day.Add(day);
             var menu = _context.Menu.Include(m => m.Days).Where(m => m.Id == id).First();
             if (menu.Days == null)

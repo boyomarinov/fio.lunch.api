@@ -23,7 +23,7 @@ namespace Fio.Lunch.API.Controllers
         [HttpGet]
         public IEnumerable<Menu> GetMenus()
         {
-            return _context.Menu.Include(m => m.Days.Select(d=>d.Meals));
+            return _context.Menu.Include(m => m.Days.Select(d => d.Meals));
         }
 
         [HttpGet]
@@ -117,7 +117,7 @@ namespace Fio.Lunch.API.Controllers
             foreach (var day in menu.Days)
             {
                 var meals = new List<Meal>();
-                foreach (var meal in day.Meals)
+                foreach (var meal in day.Meals ?? new List<Meal>())
                 {
                     var mmm = _context.Meal.Where(m => m.Id == meal.Id).FirstOrDefault();
                     if (mmm == null)
@@ -135,7 +135,7 @@ namespace Fio.Lunch.API.Controllers
             var menuDays = new List<Day>();
             foreach (var day in menu.Days)
             {
-                var ddd = _context.Day.Include(d=>d.Meals).Where(d => d.Date == day.Date).FirstOrDefault();
+                var ddd = _context.Day.Include(d => d.Meals).Where(d => d.Date == day.Date).FirstOrDefault();
                 if (ddd == null)
                     ddd = day;
 
