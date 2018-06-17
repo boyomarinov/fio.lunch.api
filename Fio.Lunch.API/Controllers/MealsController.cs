@@ -20,11 +20,22 @@ namespace Fio.Lunch.API.Controllers
             _context = context;
         }
 
-        // GET: api/Meals
+
         [HttpGet]
-        public IEnumerable<Meal> GetMeal()
+        public IEnumerable<Meal> GetMeals(string keyword = "", string description = "")
         {
-            return _context.Meal;
+            IQueryable<Meal> menuContext = _context.Meal;
+            if (!string.IsNullOrEmpty(keyword))
+            {
+                menuContext = menuContext.Where(m => m.Keywords.IndexOf(keyword, StringComparison.InvariantCultureIgnoreCase) > -1);
+            }
+
+            if (!string.IsNullOrEmpty(description))
+            {
+                menuContext = menuContext.Where(m => m.Description.IndexOf(description, StringComparison.InvariantCultureIgnoreCase) > -1);
+            }
+
+            return menuContext;
         }
 
         // GET: api/Meals/5

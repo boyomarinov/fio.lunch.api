@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Fio.Lunch.API.Models;
 using System.IO;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Fio.Lunch.API.Controllers
 {
@@ -98,28 +99,34 @@ namespace Fio.Lunch.API.Controllers
         }
 
         // POST: api/Resources
-        [HttpPost]
-        [Route("api/v1/menus")]
-        public async Task<IActionResult> UploadMenu(List<IFormFile> files)
+        [HttpPost, DisableRequestSizeLimit]
+        [Route("/api/v1/resources/files")]
+        public IActionResult UploadMenu()//List<IFormFile> files)
         {
-            throw new NotImplementedException("TODO: Implement file upload and read from spread sheet");
-            long size = files.Sum(f => f.Length);
+            var file = Request.Form.Files[0];
+            //throw new NotImplementedException("TODO: Implement file upload and read from spread sheet");
+            ////long size = files.Sum(f => f.Length);
 
-            // full path to file in temp location
-            var filePath = Path.GetTempFileName();
+            ////// full path to file in temp location
+            ////////var filePath = Path.GetTempFileName();
 
-            foreach (var formFile in files)
-            {
-                if (formFile.Length > 0)
-                {
-                    using (var stream = new FileStream(filePath, FileMode.Create))
-                    {
-                        await formFile.CopyToAsync(stream);
-                    }
-                }
-            }
+            EntityEntry<Resource> res = null;
+            ////foreach (var formFile in files)
+            ////{
+            ////    var resource = new Resource();
+            ////    if (formFile.Length > 0)
+            ////    {
+            ////        using (var stream = new MemoryStream(resource.Data))
+            ////        {
 
-            return Ok();
+            ////            await formFile.CopyToAsync(stream);
+            ////        }
+            ////    }
+            ////    res = _context.Resource.Add(resource);
+            ////}
+
+            ////_context.SaveChanges();
+            return Ok(res.Entity);
         }
 
         // DELETE: api/Resources/5
